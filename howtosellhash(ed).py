@@ -5,14 +5,16 @@ import hashlib
 def register ():
     salt = bcrypt.gensalt()
     print('Making a user')
-    user = input('Navn: ').encode()
+    regname = input('Name: ').encode()
+    usercheck(regname)
     hashed = bcrypt.hashpw(input('password: ').encode('utf-8'), salt)
     file = open('user_details_josh.txt','ab')
-    file.write(user + b',' + hashed + b',' + salt + b'\n')
+    file.write(regname + b',' + hashed + b',' + salt + b'\n')
     file.close()
     logreg()
 
 def logincheck (logname):
+    print('login')
     file = open('user_details_josh.txt','rb')
     data = file.readlines()
     file.close()
@@ -34,7 +36,7 @@ def logincheck (logname):
 def logreg():
     loginregist = input('log/reg? ')
     if loginregist == 'log':
-        print('Du er ved at logge ind')
+        print('Loggin in')
         login()
     elif loginregist == 'reg':
         register()
@@ -42,8 +44,19 @@ def logreg():
         logreg()
 
 def login():
-    logname = input('Navn: ').encode()
+    logname = input('Name: ').encode()
     logincheck(logname)
+
+def usercheck(regname):
+    file = open('user_details_josh.txt', 'rb')
+    data = file.readlines()
+    file.close()
+    for i in data:
+        i.replace(b'\n',b'')
+        user, hashed, salt = i.split(b',', -1)
+        if regname == user:
+            print('user already exists, try a new one')
+            register()
 
 
 logreg()

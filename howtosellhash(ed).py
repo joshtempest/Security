@@ -1,6 +1,4 @@
 import bcrypt
-import hashlib
-
 
 def register ():
     salt = bcrypt.gensalt()
@@ -8,14 +6,14 @@ def register ():
     regname = input('Name: ').encode()
     usercheck(regname)
     hashed = bcrypt.hashpw(input('password: ').encode('utf-8'), salt)
-    file = open('user_details_josh.txt','ab')
+    file = open('user_details.txt','ab')
     file.write(regname + b',' + hashed + b',' + salt + b'\n')
     file.close()
     logreg()
 
+#checks if login information is the same as in the database
 def logincheck (logname):
-    print('login')
-    file = open('user_details_josh.txt','rb')
+    file = open('user_details.txt','rb')
     data = file.readlines()
     file.close()
     for i in data:
@@ -48,7 +46,7 @@ def login():
     logincheck(logname)
 
 def usercheck(regname):
-    file = open('user_details_josh.txt', 'rb')
+    file = open('user_details.txt', 'rb')
     data = file.readlines()
     file.close()
     for i in data:
